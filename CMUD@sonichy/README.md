@@ -7,8 +7,5 @@ Display uptime, cpu, memory, upload, download on GNOME taskbar.
 Display uptime, cpu, memory, upload, download on GNOME taskbar. 
 
 ## Reference
-[guide](https://gjs.guide/extensions/development/creating.html)
+[guide](https://gjs.guide/extensions/development/creating.html)  
 [Cinnamon_Applet](https://github.com/sonichy/Cinnamon_Applet)
-
-## Debug
-dbus-run-session -- gnome-shell --nested --wayland

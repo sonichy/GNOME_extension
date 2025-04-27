@@ -9,6 +9,3 @@ Get Bing wallpaper API, parse image url, download image, set GNOME wallpaper.
 [guide](https://gjs.guide/extensions/development/creating.html)  
 [Soup](https://libsoup.gnome.org/libsoup-3.0/index.html)  
 [bing-wallpaper-gnome-extension](https://github.com/neffo/bing-wallpaper-gnome-extension)
-
-## Debug
-dbus-run-session -- gnome-shell --nested --wayland
