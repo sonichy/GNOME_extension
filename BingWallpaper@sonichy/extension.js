@@ -26,10 +26,16 @@ export default class BingWallpaperExtension extends Extension {
         Main.panel.addToStatusArea(this.uuid, this._indicator);
         
         const menu_browse = new PopupMenu.PopupImageMenuItem('Browse', 'folder-directory-symbolic', {});
-        menu_browse.connect('activate', () => {});
+        menu_browse.connect('activate', () => {
+            let uri = 'file://' + imagePath;
+            Gio.app_info_launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
+        });
         this._indicator.menu.addMenuItem(menu_browse);
         
-        this.menu_update = new PopupMenu.PopupImageMenuItem('Update', 'info-symbolic', {});
+        this.gsettings = new Gio.Settings({ schema: schema });
+        let uri = this.gsettings.get_string('picture-uri');
+        let filename = uri.substring(uri.lastIndexOf('/') + 1)
+        this.menu_update = new PopupMenu.PopupImageMenuItem(filename, 'info-symbolic', {});
         this.menu_update.connect('activate', () => this.getWallpaper());
         this._indicator.menu.addMenuItem(this.menu_update);
     }
@@ -39,11 +45,7 @@ export default class BingWallpaperExtension extends Extension {
         this._indicator = null;        
     }
     
-    getWallpaper() {
-        console.log('BingWallpaper menu pressed!');            
-        let gsettings = new Gio.Settings({ schema: schema });
-        //let uri = gsettings.get_string('picture-uri');
-        //console.log(schema + ': ' + uri);
+    getWallpaper() {        
         var url = 'http://cn.bing.com/HPImageArchive.aspx';
         let params = { format: 'js', idx: '0' , n: '1' } ;
         let httpSession = new Soup.Session();
@@ -51,26 +53,21 @@ export default class BingWallpaperExtension extends Extension {
         httpSession.send_and_read_async(request, GLib.PRIORITY_DEFAULT, null, (httpSession, message) => {            
             const decoder = new TextDecoder();
             var data = decoder.decode(httpSession.send_and_read_finish(message).get_data());
-            console.log(data);
             var json = JSON.parse(data);
             let imgUrl = "http://www.bing.com" + json.images[0].url;
             var filename = json.images[0].enddate + '_' + json.images[0].urlbase.replace('/th?id=OHR.', '') + '.jpg';
             this.menu_update.label.text = json.images[0].copyright;
-            //console.log(imgUrl);
-            //console.log(filename);
             var filepath = imagePath + '/' + filename;
-            //console.log(filepath);
             let file = Gio.file_new_for_path(filepath);
             let request = Soup.Message.new('GET', imgUrl);
             httpSession.send_and_read_async(request, GLib.PRIORITY_DEFAULT, null, (httpSession, message) => {
                 data = httpSession.send_and_read_finish(message).get_data();
                 file.replace_contents_bytes_async(data, null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null, (file, res) => {
                     let uri = 'file://' + filepath;
-                    //console.log(uri);
-                    gsettings.set_string('picture-uri', uri);
-                    gsettings.set_string('picture-uri-dark', uri);
+                    this.gsettings.set_string('picture-uri', uri);
+                    this.gsettings.set_string('picture-uri-dark', uri);
                     Gio.Settings.sync();
-                    gsettings.apply();
+                    this.gsettings.apply();
                 });
             });            
         });
