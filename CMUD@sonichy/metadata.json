@@ -1,0 +1,9 @@
+{
+    "uuid": "CMUD@sonichy",
+    "name": "CMUD",
+    "description": "Display uptime, cpu, memory, upload, download on GNOME taskbar.",
+    "author": "sonichy",
+    "version": "1.0",
+    "shell-version": [ "45", "46", "47", "48" ],
+    "url": "https://github.com/sonichy/Cinnamon_Applet"
+}

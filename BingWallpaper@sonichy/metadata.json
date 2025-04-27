@@ -1,0 +1,9 @@
+{
+    "uuid": "BingWallpaper@sonichy",
+    "name": "Bing Wallpaper",
+    "description": "Change wallpaper of GNOME with Bing wallpaper on one click.",
+    "author": "sonichy",
+    "version": "1.0",
+    "shell-version": [ "45", "46", "47", "48" ],
+    "url": "https://github.com/sonichy/GNOME_extension"
+}
