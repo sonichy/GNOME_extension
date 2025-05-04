@@ -83,6 +83,8 @@ export default class CMUDExtension extends Extension {
             GLib.source_remove(this._timeout);
             this._timeout = null;
         }
+        this.label_tooltip?.destroy();
+        this.label_tooltip = null;
         this._indicator?.destroy();
         this._indicator = null;        
     }
