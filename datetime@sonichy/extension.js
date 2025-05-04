@@ -27,18 +27,26 @@ export default class DatetimeExtension extends Extension {
         calendar.setDate(now);        
         this._indicator.menu.addMenuItem(menuItem);
         
-        const menuItem1 = new PopupMenu.PopupMenuItem('');
+        //const menuItem1 = new PopupMenu.PopupMenuItem('');
         //menuItem1.label.set_style('text-align:center'); //无效
-        this._indicator.menu.addMenuItem(menuItem1);
+        //this._indicator.menu.addMenuItem(menuItem1);
         
         this.label_tooltip = new St.Label({ text: '' });
-        this.label_tooltip.set_style('background:#222;padding:10px;');
+        this.label_tooltip.set_style('background:#222;padding:10px;border:1px solid #aaa;border-radius:10px;');
         global.stage.add_child(this.label_tooltip);
         this.label_tooltip.hide();
-        this._indicator.connect('notify::hover', () => {
+        this._indicator.connect('notify::hover', () => {            
             const [x, y] = this._indicator.get_transformed_position();
-            //console.log(x,y);
-            this.label_tooltip.set_position(x, y - this.label_tooltip.height);
+            //console.log(x, y);
+            if (x == 0 && y != 0) //LEFT
+                this.label_tooltip.set_position(x + this._indicator.width + 1, y);
+            else if (x != 0 && y == 0) //TOP
+                this.label_tooltip.set_position(x, y + this.label_tooltip.height + 4);                
+            else
+                if (this._indicator.height == Main.panel.height) //BOTTOM
+                    this.label_tooltip.set_position(x, y - this.label_tooltip.height - 1);
+                else //RIGHT
+                    this.label_tooltip.set_position(x - this.label_tooltip.width - 1, y);
             if (this._indicator.hover)
                 this.label_tooltip.show();
             else
@@ -58,7 +66,7 @@ export default class DatetimeExtension extends Extension {
 	        var weekday1 = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
             var text = h + ' : ' + m + '\n' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + weekday[day];            
             label.set_text(text);            
-            menuItem1.label.text = date.toLocaleString() + ' ' + weekday1[day];
+            //menuItem1.label.text = date.toLocaleString() + ' ' + weekday1[day];
             this.label_tooltip.text = date.toLocaleString() + ' ' + weekday1[day];
             // Run as loop, not once.
             return GLib.SOURCE_CONTINUE;

@@ -37,8 +37,30 @@ export default class CMUDExtension extends Extension {
         // Add the indicator to the panel
         Main.panel.addToStatusArea(this.uuid, this._indicator);
         
-        const menuItem = new PopupMenu.PopupMenuItem('');
-        this._indicator.menu.addMenuItem(menuItem);
+        //const menuItem = new PopupMenu.PopupMenuItem('');
+        //this._indicator.menu.addMenuItem(menuItem);
+        
+        this.label_tooltip = new St.Label({ text: '' });
+        this.label_tooltip.set_style('background:#222; padding:10px; border:1px solid #aaa; border-radius:10px;');
+        global.stage.add_child(this.label_tooltip);
+        this.label_tooltip.hide();
+        this._indicator.connect('notify::hover', () => {            
+            const [x, y] = this._indicator.get_transformed_position();
+            //console.log(x, y);
+            if (x == 0 && y != 0) //LEFT
+                this.label_tooltip.set_position(x + this._indicator.width + 1, y);
+            else if (x != 0 && y == 0) //TOP
+                this.label_tooltip.set_position(x, y + this.label_tooltip.height + 4);                
+            else
+                if (this._indicator.height == Main.panel.height) //BOTTOM
+                    this.label_tooltip.set_position(x, y - this.label_tooltip.height - 1);
+                else //RIGHT
+                    this.label_tooltip.set_position(x - this.label_tooltip.width - 1, y);
+            if (this._indicator.hover)
+                this.label_tooltip.show();
+            else
+                this.label_tooltip.hide();
+        });
         
         this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
             var net = this.net();
@@ -48,7 +70,8 @@ export default class CMUDExtension extends Extension {
             this.cpu();
             area_cpu.queue_repaint();
             var s = 'Uptime: ' + this.uptime() + '\nCPU: ' + cp + '%\nMem: ' + this.mem() + '\nUp: ' + this.B2G(net.ub) + '\nDown: ' + this.B2G(net.db);
-            menuItem.label.text = s;
+            //menuItem.label.text = s;
+            this.label_tooltip.text = s;
             // Run as loop, not once.
             return GLib.SOURCE_CONTINUE;
         });

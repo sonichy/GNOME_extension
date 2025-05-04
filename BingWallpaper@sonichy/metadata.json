@@ -1,7 +1,7 @@
 {
     "uuid": "BingWallpaper@sonichy",
     "name": "Bing Wallpaper",
-    "description": "Change wallpaper of GNOME with Bing wallpaper on one click.",
+    "description": "Change wallpaper of GNOME with Bing wallpaper on one click. This extension is not affiliated, funded, or in any way associated with Microsoft and Bing.",
     "author": "sonichy",
     "version": "1.0",
     "shell-version": [ "45", "46", "47", "48" ],
