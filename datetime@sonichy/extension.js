@@ -41,7 +41,7 @@ export default class DatetimeExtension extends Extension {
             if (x == 0 && y != 0) //LEFT
                 this.label_tooltip.set_position(x + this._indicator.width + 1, y);
             else if (x != 0 && y == 0) //TOP
-                this.label_tooltip.set_position(x, y + this.label_tooltip.height + 4);                
+                this.label_tooltip.set_position(x, y + this._indicator.height + 1);                
             else
                 if (this._indicator.height == Main.panel.height) //BOTTOM
                     this.label_tooltip.set_position(x, y - this.label_tooltip.height - 1);
