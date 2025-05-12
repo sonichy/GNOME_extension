@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+ <schema id="org.gnome.shell.extensions.datetime" path="/org/gnome/shell/extensions/datetime/">
+  <key name="memo" type="s">
+   <default>""</default>
+   <summary>Set memo</summary>
+   <description>Show this in tooltip</description>
+  </key>
+ </schema>
+</schemalist>
