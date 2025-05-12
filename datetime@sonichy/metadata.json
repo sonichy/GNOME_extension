@@ -1,10 +1,10 @@
 {
     "uuid": "datetime@sonichy",
-    "name": "datetime",
-    "settings-schema": "org.gnome.shell.extensions.datetime",
+    "name": "datetime",    
     "description": "Display date and time on GNOME taskbar",
     "author": "sonichy",
     "version": "1.0",
     "shell-version": [ "45", "46", "47", "48" ],
-    "url": "https://github.com/sonichy/GNOME_extension"    
+    "url": "https://github.com/sonichy/GNOME_extension",
+    "settings-schema": "org.gnome.shell.extensions.datetime"
 }

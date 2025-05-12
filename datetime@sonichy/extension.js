@@ -30,8 +30,8 @@ export default class DatetimeExtension extends Extension {
         this._indicator.menu.addMenuItem(menu_calendar);        
         
         //https://gjs.guide/extensions/development/preferences.html
-        const schema = 'org.gnome.shell.extensions.datetime';
-        this._settings = this.getSettings(schema);
+        //const schema = 'org.gnome.shell.extensions.datetime';
+        this._settings = this.getSettings();
         
         const menu_set = new PopupMenu.PopupMenuItem('Set');
         menu_set.connect('activate', () => {            
