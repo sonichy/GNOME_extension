@@ -69,7 +69,7 @@ export default class DatetimeExtension extends Extension {
         this._indicator.menu.addMenuItem(menu_set);
         
         this.label_tooltip = new St.Label();
-        this.label_tooltip.set_style('background:#222; padding:10px; border:1px solid #aaa; border-radius:10px;');
+        this.label_tooltip.set_style('background:rgba(10,10,10,0.8); padding:10px; border:1px solid #aaa; border-radius:10px;');
         global.stage.add_child(this.label_tooltip);
         this.label_tooltip.hide();
         this._indicator.connect('notify::hover', () => {            
@@ -84,7 +84,6 @@ export default class DatetimeExtension extends Extension {
                     this.label_tooltip.set_position(parseInt(x - this.label_tooltip.width / 2 + this._indicator.width / 2), y - this.label_tooltip.height - 1);
                 else //RIGHT
                     this.label_tooltip.set_position(x - this.label_tooltip.width - 1, y);
-            //console.log(x - this.label_tooltip.width / 2 + this._indicator.width / 2);
             if (this._indicator.hover)
                 this.label_tooltip.show();
             else
