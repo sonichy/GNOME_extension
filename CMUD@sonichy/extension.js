@@ -41,7 +41,7 @@ export default class CMUDExtension extends Extension {
         //this._indicator.menu.addMenuItem(menuItem);
         
         this.label_tooltip = new St.Label({ text: '' });
-        this.label_tooltip.set_style('background:#222; padding:10px; border:1px solid #aaa; border-radius:10px;');
+        this.label_tooltip.set_style('background:rgba(10,10,10,0.8); padding:10px; border:1px solid #aaa; border-radius:10px; font-family:Noto Mono');
         global.stage.add_child(this.label_tooltip);
         this.label_tooltip.hide();
         this._indicator.connect('notify::hover', () => {            
@@ -50,10 +50,10 @@ export default class CMUDExtension extends Extension {
             if (x == 0 && y != 0) //LEFT
                 this.label_tooltip.set_position(x + this._indicator.width + 1, y);
             else if (x != 0 && y == 0) //TOP
-                this.label_tooltip.set_position(x, y + this._indicator.height + 1);                
+                this.label_tooltip.set_position(x - this.label_tooltip.width / 2 + this._indicator.width / 2, y + this._indicator.height + 1);                
             else
                 if (this._indicator.height == Main.panel.height) //BOTTOM
-                    this.label_tooltip.set_position(x, y - this.label_tooltip.height - 1);
+                    this.label_tooltip.set_position(x - this.label_tooltip.width / 2 + this._indicator.width / 2, y - this.label_tooltip.height - 1);
                 else //RIGHT
                     this.label_tooltip.set_position(x - this.label_tooltip.width - 1, y);
             if (this._indicator.hover)
@@ -69,7 +69,7 @@ export default class CMUDExtension extends Extension {
             area_mem.queue_repaint();
             this.cpu();
             area_cpu.queue_repaint();
-            var s = 'Uptime: ' + this.uptime() + '\nCPU: ' + cp + '%\nMem: ' + this.mem() + '\nUp: ' + this.B2G(net.ub) + '\nDown: ' + this.B2G(net.db);
+            var s = 'UPT: ' + this.uptime() + '\nCPU: ' + cp + '%\nMEM: ' + this.mem() + '\nUPB: ' + this.B2G(net.ub) + '\nDNB: ' + this.B2G(net.db);
             //menuItem.label.text = s;
             this.label_tooltip.text = s;
             // Run as loop, not once.
