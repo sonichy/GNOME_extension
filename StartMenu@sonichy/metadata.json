@@ -1,0 +1,9 @@
+{
+    "uuid": "StartMenu@sonichy",
+    "name": "StartMenu",    
+    "description": "Display application list on GNOME taskbar",
+    "author": "sonichy",
+    "version": "1.0",
+    "shell-version": [ "45", "46", "47", "48" ],
+    "url": "https://github.com/sonichy/GNOME_extension"    
+}
