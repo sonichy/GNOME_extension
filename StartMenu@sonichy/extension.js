@@ -31,7 +31,7 @@ export default class DatetimeExtension extends Extension {
         while ((nextType = iter.next())) {
             //console.log(nextType);
             if (nextType == GMenu.TreeItemType.DIRECTORY) {
-                const dir = iter.get_directory();
+                let dir = iter.get_directory();
                 //console.log(dir.get_name());
                 // https://gjs.guide/extensions/topics/popup-menu.html#popupsubmenumenuitem
                 let menuItem = new PopupMenu.PopupSubMenuMenuItem(dir.get_name(), true, {});
@@ -42,6 +42,7 @@ export default class DatetimeExtension extends Extension {
                 let iter1 = dir.iter();
                 let nextType1;
                 while (nextType1 = iter1.next()) {
+                    //console.log(nextType1);
                     if (nextType1 == GMenu.TreeItemType.ENTRY) {
                         let id = iter1.get_entry().get_desktop_file_id();                        
                         let app = appSys.lookup_app(id);
@@ -53,17 +54,18 @@ export default class DatetimeExtension extends Extension {
             }
         }
         
-        var menuItem = new PopupMenu.PopupImageMenuItem('设置', 'settings', () => {
-            var id = 'org.gnome.Settings.desktop';
+        let menuItem = new PopupMenu.PopupImageMenuItem('设置', 'settings', {});
+        menuItem.connect('activate', () => {
+            let id = 'org.gnome.Settings.desktop';
             let app = appSys.lookup_app(id);
             app.open_new_window(-1);
-        });        
+        });
         indicator.menu.addMenuItem(menuItem);
         
         // Shutdown
         // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menuButton.js
         let systemActions = SystemActions.getDefault();
-        var menuItem = new PopupMenu.PopupSubMenuMenuItem('关机', true, {});
+        menuItem = new PopupMenu.PopupSubMenuMenuItem('关机', true, {});
         menuItem.icon.icon_name = 'system-shutdown';
         indicator.menu.addMenuItem(menuItem);
         menuItem.menu.addAction('关机', () => systemActions.activatePowerOff(), 'system-shutdown');
