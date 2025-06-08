@@ -8,5 +8,8 @@
 ## GSettings schema must be compiled
 `glib-compile-schemas schemas/`
 
+## PreferencesPage
+https://gjs.guide/extensions/development/preferences.html
+
 ## Debug
 dbus-run-session -- gnome-shell --nested --wayland

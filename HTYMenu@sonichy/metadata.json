@@ -1,0 +1,10 @@
+{
+    "uuid": "HTYMenu@sonichy",
+    "name": "HTYMenu",    
+    "description": "Display application list on GNOME taskbar",
+    "author": "sonichy",
+    "version": "2.0",
+    "shell-version": [ "45", "46", "47", "48" ],
+    "url": "https://github.com/sonichy/GNOME_extension",
+    "settings-schema": "org.gnome.shell.extensions.HTYMenu"
+}

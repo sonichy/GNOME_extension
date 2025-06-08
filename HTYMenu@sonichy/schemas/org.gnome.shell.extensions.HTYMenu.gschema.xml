@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+ <schema id="org.gnome.shell.extensions.HTYMenu" path="/org/gnome/shell/extensions/HTYMenu/">
+  <key name="icon-name" type="s">
+   <default>""</default>
+   <summary>Set icon name</summary>
+   <description>Show icon by name in statusbar</description>
+  </key>
+ </schema>
+</schemalist>
