@@ -25,17 +25,24 @@ export default class ExamplePreferences extends ExtensionPreferences {
             icon_name = this.dir.get_path() + '/gnome.svg';
         const icon = new Gtk.Image({
             gicon: Gio.icon_new_for_string(icon_name),
-            pixel_size: 64
+            pixel_size: 32
         });
-        group.add(icon);
+        //group.add(icon);
         
         const button = new Gtk.Button({
-            label: _('Browse'),
+            //label: _('Browse'),
             valign: Gtk.Align.CENTER
         });
-        //button.container.add(icon);
+        button.set_child(icon);
         button.connect('clicked', () => {
             console.log('button clicked!');
+            if (scrollWindow.visible) {
+                searchEntry.hide();
+                scrollWindow.hide();
+            } else {
+                searchEntry.show();
+                scrollWindow.show();
+            }
         });
         const row_icon = new Adw.ActionRow({
             title: _('Choose a New Icon'),
@@ -129,6 +136,9 @@ export default class ExamplePreferences extends ExtensionPreferences {
             //vscrollbar_policy: Gtk.PolicyType.AUTOMATIC,
         });
         group.add(scrollWindow);
+        
+        searchEntry.hide();
+        scrollWindow.hide();
         
         
         // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/settings/AboutPage.js
