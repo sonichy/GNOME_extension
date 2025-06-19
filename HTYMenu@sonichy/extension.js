@@ -82,11 +82,11 @@ export default class DatetimeExtension extends Extension {
                 let dir = iter.get_directory();
                 //console.log(dir.get_name());
                 // https://gjs.guide/extensions/topics/popup-menu.html#popupsubmenumenuitem
-                menuItem = new PopupMenu.PopupSubMenuMenuItem(dir.get_name(), true, {});
+                let menuItem1 = new PopupMenu.PopupSubMenuMenuItem(dir.get_name(), true, {});
                 // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/utils.js
                 //console.log(dir.get_icon().to_string());
-                menuItem.icon.icon_name = dir.get_icon().to_string();
-                this.indicator.menu.addMenuItem(menuItem);
+                menuItem1.icon.icon_name = dir.get_icon().to_string();
+                this.indicator.menu.addMenuItem(menuItem1);
                 let iter1 = dir.iter();
                 let nextType1;
                 while (nextType1 = iter1.next()) {
@@ -96,7 +96,7 @@ export default class DatetimeExtension extends Extension {
                         let app = appSys.lookup_app(id);
                         // https://gjs.guide/extensions/topics/popup-menu.html, addAction(title, callback, icon)
                         //menuItem.menu.addAction(app.get_name(), () => app.open_new_window(-1), app.get_icon().to_string()); //路径图标不显示
-                        menuItem.menu.addAction(app.get_name(), () => app.open_new_window(-1), Gio.icon_new_for_string(app.get_icon().to_string()));
+                        menuItem1.menu.addAction(app.get_name(), () => app.open_new_window(-1), Gio.icon_new_for_string(app.get_icon().to_string()));
                     }
                 }
             }
