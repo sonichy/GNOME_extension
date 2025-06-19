@@ -28,18 +28,53 @@ export default class DatetimeExtension extends Extension {
         });
         this.indicator.add_child(this.icon);
         
+        //Main.panel.addToStatusArea(this.uuid, this.indicator);
+        //https://extensions.gnome.org/review/51343
+        Main.panel.addToStatusArea(this.uuid, this.indicator, 1, 'left');
+        
+        // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/baseMenuLayout.js        
+        this.tree = new GMenu.Tree({ menu_basename: 'applications.menu' });        
+        this.tree.load_sync();
+        this.tree.connectObject('changed', () => this.genMenu(), this);
+        this.genMenu();
+    }
+
+    disable() {
+        this.indicator?.destroy();
+        this.indicator = null;
+    }
+    
+    // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/baseMenuLayout.js
+    //https://extensions.gnome.org/review/51343
+    loadFavorites(menuItem) {
+        let appList = AppFavorites.getAppFavorites().getFavorites();
+        for (let i=0; i<appList.length; i++) {
+            let app = appList[i];            
+            menuItem.menu.addAction(app.get_name(), () => app.open_new_window(-1), Gio.icon_new_for_string(app.get_icon().to_string()));
+        }
+    }
+    
+    reload() {
+        let icon_name = this.settings.get_string('icon-name');
+        if (icon_name == '')
+            icon_name = this.dir.get_path() + '/gnome.svg';        
+        let gicon = Gio.icon_new_for_string(icon_name);
+        this.icon.gicon = gicon;
+    }
+    
+    genMenu() {
+        this.indicator.menu.removeAll();
+        this.tree.load_sync();
+        
         //favorite
         let menuItem = new PopupMenu.PopupSubMenuMenuItem('收藏', true, {});
         menuItem.icon.icon_name = 'favorite';        
         this.indicator.menu.addMenuItem(menuItem);
-        this.loadFavorites(menuItem);
+        this.loadFavorites(menuItem);        
         
-        // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/baseMenuLayout.js
         let appSys = Shell.AppSystem.get_default();
-        let tree = new GMenu.Tree({ menu_basename: 'applications.menu' });
-        tree.load_sync();
-        const root = tree.get_root_directory();
-        const iter = root.iter();
+        let root = this.tree.get_root_directory();
+        let iter = root.iter();
         let nextType;
         while ((nextType = iter.next())) {
             //console.log(nextType);
@@ -47,7 +82,7 @@ export default class DatetimeExtension extends Extension {
                 let dir = iter.get_directory();
                 //console.log(dir.get_name());
                 // https://gjs.guide/extensions/topics/popup-menu.html#popupsubmenumenuitem
-                let menuItem = new PopupMenu.PopupSubMenuMenuItem(dir.get_name(), true, {});
+                menuItem = new PopupMenu.PopupSubMenuMenuItem(dir.get_name(), true, {});
                 // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/utils.js
                 //console.log(dir.get_icon().to_string());
                 menuItem.icon.icon_name = dir.get_icon().to_string();
@@ -67,7 +102,7 @@ export default class DatetimeExtension extends Extension {
             }
         }
         
-        menuItem = new PopupMenu.PopupImageMenuItem('设置', 'settings', {});        
+        menuItem = new PopupMenu.PopupImageMenuItem('设置', 'settings', {});
         menuItem.connect('activate', () => {
             /*
             let id = 'org.gnome.Settings.desktop';
@@ -90,33 +125,6 @@ export default class DatetimeExtension extends Extension {
         menuItem.menu.addAction('锁定', () => systemActions.activateLockScreen(), 'changes-prevent');
         menuItem.menu.addAction('注销', () => systemActions.activateLogout(), 'system-log-out');        
         menuItem.menu.addAction('休眠', () => systemActions.activateSuspend(), 'weather-clear-night');
-        
-        //Main.panel.addToStatusArea(this.uuid, this.indicator);
-        //https://extensions.gnome.org/review/51343
-        Main.panel.addToStatusArea(this.uuid, this.indicator, 1, 'left');
-    }
-
-    disable() {
-        this.indicator?.destroy();
-        this.indicator = null;
-    }
-    
-    // /usr/share/gnome-shell/extensions/arcmenu@arcmenu.com/menulayouts/baseMenuLayout.js
-    //https://extensions.gnome.org/review/51343
-    loadFavorites(menuItem) {
-        const appList = AppFavorites.getAppFavorites().getFavorites();
-        for (let i=0; i<appList.length; i++) {
-            let app = appList[i];            
-            menuItem.menu.addAction(app.get_name(), () => app.open_new_window(-1), Gio.icon_new_for_string(app.get_icon().to_string()));
-        }
-    }
-    
-    reload() {
-        let icon_name = this.settings.get_string('icon-name');
-        if (icon_name == '')
-            icon_name = this.dir.get_path() + '/gnome.svg';        
-        let gicon = Gio.icon_new_for_string(icon_name);
-        this.icon.gicon = gicon;
     }
     
 }
