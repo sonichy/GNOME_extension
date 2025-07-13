@@ -120,11 +120,11 @@ export default class DatetimeExtension extends Extension {
         menuItem = new PopupMenu.PopupSubMenuMenuItem('关机', true, {});
         menuItem.icon.icon_name = 'system-shutdown';
         this.indicator.menu.addMenuItem(menuItem);
-        menuItem.menu.addAction('关机', () => systemActions.activatePowerOff(), 'system-shutdown');
-        menuItem.menu.addAction('重启', () => systemActions.activateRestart(), 'system-reboot');
-        menuItem.menu.addAction('锁定', () => systemActions.activateLockScreen(), 'changes-prevent');
-        menuItem.menu.addAction('注销', () => systemActions.activateLogout(), 'system-log-out');        
+        menuItem.menu.addAction('注销', () => systemActions.activateLogout(), 'system-log-out');
+        menuItem.menu.addAction('锁定', () => systemActions.activateLockScreen(), 'changes-prevent');        
         menuItem.menu.addAction('休眠', () => systemActions.activateSuspend(), 'weather-clear-night');
+        menuItem.menu.addAction('重启', () => systemActions.activateRestart(), 'system-reboot');
+        menuItem.menu.addAction('关机', () => systemActions.activatePowerOff(), 'system-shutdown');
     }
     
 }
