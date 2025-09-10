@@ -36,19 +36,19 @@ export default class DatetimeExtension extends Extension {
         const menu_set = new PopupMenu.PopupMenuItem('Set');
         menu_set.connect('activate', () => {            
             //https://gjs.guide/extensions/topics/dialogs.html            
-            const dialog = new Dialog.Dialog(global.stage, 'my-dialog');
+            const dialog = new Dialog.Dialog(global.stage, 'my-dialog');            
             
-            const box = new St.BoxLayout();
-            const label = new St.Label({ text: 'Memo', y_align: Clutter.ActorAlign.CENTER });
-            label.style = 'margin:0 10px;';
+            const box = new St.BoxLayout();            
+            const label = new St.Label({ text: 'Memo', y_align: Clutter.ActorAlign.CENTER });            
+            label.style = 'margin:0 10px;';            
             box.add_child(label);
             
             var s = this._settings.get_string('memo');
             const entry = new St.Entry({ text: s });
-            entry.width = 200;
-            box.add_child(entry);
+            entry.width = 200;            
+            box.add_child(entry);            
             
-            dialog.contentLayout.add_child(box);
+            dialog.contentLayout.add_child(box);            
             
             dialog.addButton({
                 label: 'Save',
@@ -64,7 +64,7 @@ export default class DatetimeExtension extends Extension {
                     dialog.destroy();
                 },
             });
-            dialog.set_position(parseInt(global.stage.width/2 - dialog.width/2), parseInt(global.stage.height/2 - dialog.height/2));
+            dialog.set_position(parseInt(global.stage.width/2 - dialog.width/2), parseInt(global.stage.height/2 - dialog.height/2));            
         });
         this._indicator.menu.addMenuItem(menu_set);
         
@@ -94,17 +94,20 @@ export default class DatetimeExtension extends Extension {
             var date = new Date();
 	        var h = date.getHours();
 	        if (h < 10)
-	            h = "0" + h;
+	            h = '0' + h;
 	        var m = date.getMinutes();
 	        if (m < 10)
-	            m = "0" + m;
+	            m = '0' + m;
 	        var day = date.getDay();
-	        var weekday = ["日", "一", "二", "三", "四", "五", "六"];
-	        var weekday1 = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+	        var weekday = ['日', '一', '二', '三', '四', '五', '六'];
+	        var weekday1 = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
             var text = h + ':' + m + '\n' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + weekday[day];            
             label.set_text(text);            
             var s = this._settings.get_string('memo');
-            this.label_tooltip.text = date.toLocaleString() + ' ' + weekday1[day] + '\n' + s;
+            if (s == '')
+                this.label_tooltip.text = date.toLocaleString() + ' ' + weekday1[day];
+            else
+                this.label_tooltip.text = date.toLocaleString() + ' ' + weekday1[day] + '\n' + s;
             // Run as loop, not once.
             return GLib.SOURCE_CONTINUE;
         });
