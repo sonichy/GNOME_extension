@@ -20,17 +20,17 @@ export default class CMUDExtension extends Extension {
         
         var area_mem = new St.DrawingArea();
         area_mem.width = 3;
-        area_mem.height = this._indicator.height;
+        area_mem.height = Main.panel.height;
         area_mem.connect('repaint', this.onRepaint_mem);
         box.add_child(area_mem);
         
-        var label = new St.Label({ text: '↑  0KB/s\n↓  0KB/s', y_align: Clutter.ActorAlign.CENTER });
-        label.set_style('text-align:center; font-family:Noto Mono');
+        var label = new St.Label({ text: '↑0KB/s ↓0KB/s', y_align: Clutter.ActorAlign.CENTER });
+        label.set_style('text-align:center; font-family:Noto Mono; font-size:9px; line-height:1.1;');
         box.add_child(label);
         
         var area_cpu = new St.DrawingArea();
         area_cpu.width = 3;
-        area_cpu.height = this._indicator.height;
+        area_cpu.height = Main.panel.height;
         area_cpu.connect('repaint', this.onRepaint_cpu);
         box.add_child(area_cpu);
 
@@ -40,38 +40,13 @@ export default class CMUDExtension extends Extension {
         //const menuItem = new PopupMenu.PopupMenuItem('');
         //this._indicator.menu.addMenuItem(menuItem);
         
-        this.label_tooltip = new St.Label({ text: '' });
-        this.label_tooltip.set_style('background:rgba(10,10,10,0.8); padding:10px; border:1px solid #aaa; border-radius:10px; font-family:Noto Mono');
-        global.stage.add_child(this.label_tooltip);
-        this.label_tooltip.hide();
-        this._indicator.connect('notify::hover', () => {            
-            const [x, y] = this._indicator.get_transformed_position();
-            //console.log(x, y);
-            if (x == 0 && y != 0) //LEFT
-                this.label_tooltip.set_position(x + this._indicator.width + 1, y);
-            else if (x != 0 && y == 0) //TOP
-                this.label_tooltip.set_position(x - this.label_tooltip.width / 2 + this._indicator.width / 2, y + this._indicator.height + 1);                
-            else
-                if (this._indicator.height == Main.panel.height) //BOTTOM
-                    this.label_tooltip.set_position(x - this.label_tooltip.width / 2 + this._indicator.width / 2, y - this.label_tooltip.height - 1);
-                else //RIGHT
-                    this.label_tooltip.set_position(x - this.label_tooltip.width - 1, y);
-            if (this._indicator.hover)
-                this.label_tooltip.show();
-            else
-                this.label_tooltip.hide();
-        });
-        
         this._timeout = GLib.timeout_add_seconds(GLib.PRIORITY_DEFAULT, 1, () => {
             var net = this.net();
-            label.set_text('↑' + this.B2G(net.ubs) + '/s\n↓' + this.B2G(net.dbs) + '/s');
             this.mem();
             area_mem.queue_repaint();
             this.cpu();
             area_cpu.queue_repaint();
-            var s = 'UPT: ' + this.uptime() + '\nCPU: ' + cp + '%\nMEM: ' + this.mem() + '\nUPB: ' + this.B2G(net.ub) + '\nDNB: ' + this.B2G(net.db);
-            //menuItem.label.text = s;
-            this.label_tooltip.text = s;
+            label.set_text('↑' + this.B2G(net.ubs) + '/s ↓' + this.B2G(net.dbs) + '/s\nCPU:' + cp + '% MEM:' + mp + '% UPT:' + this.uptime());
             // Run as loop, not once.
             return GLib.SOURCE_CONTINUE;
         });
@@ -83,8 +58,6 @@ export default class CMUDExtension extends Extension {
             GLib.source_remove(this._timeout);
             this._timeout = null;
         }
-        this.label_tooltip?.destroy();
-        this.label_tooltip = null;
         this._indicator?.destroy();
         this._indicator = null;        
     }
@@ -94,25 +67,11 @@ export default class CMUDExtension extends Extension {
         const [, contents, etag] = file.load_contents(null);
         var t = contents.toString().split(' ');        
         var tt = Number(t[0]);
-        var d = 0;
-        if (tt > 86400) {
-            d = tt / 86400;
-            tt -= d * 86400;
-         }
-        var ds = "";
-        if (d > 0)
-            ds = d + "day";
-        var h = ~~(tt/3600);
-        if (h < 10)
-            h = '0' + h;
-        var m = ~~(tt%3600/60);
-        if (m < 10)
-            m = '0' + m;
-        var s = ~~(tt%3600%60);
-        if (s < 10)
-            s = '0' + s;
-        var hms = ds + h + ':' + m + ':' + s;
-        return hms;
+        var d = Math.floor(tt / 86400);
+        var h = Math.floor((tt - d * 86400) / 3600);
+        var ds = d < 10 ? '0' + d : '' + d;
+        var hs = h < 10 ? '0' + h : '' + h;
+        return ds + 'D:' + hs;
     }
     
     net() {
