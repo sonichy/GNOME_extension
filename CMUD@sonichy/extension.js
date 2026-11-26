@@ -13,6 +13,8 @@ var db0 = 0, ub0 = 0, tt0 = 0, idle0 = 0, mp, cp;
 export default class CMUDExtension extends Extension {
 
     enable() {
+        this._settings = this.getSettings();
+
         // Create a panel button
         this._indicator = new PanelMenu.Button(0.0, this.metadata.name, false);
         var box = new St.BoxLayout();
@@ -25,7 +27,6 @@ export default class CMUDExtension extends Extension {
         box.add_child(area_mem);
         
         var label = new St.Label({ text: '↑0KB/s ↓0KB/s', y_align: Clutter.ActorAlign.CENTER });
-        label.set_style('text-align:center; font-family:Noto Mono; font-size:9px; line-height:1.1;');
         box.add_child(label);
         
         var area_cpu = new St.DrawingArea();
@@ -46,7 +47,11 @@ export default class CMUDExtension extends Extension {
             area_mem.queue_repaint();
             this.cpu();
             area_cpu.queue_repaint();
-            label.set_text('↑' + this.B2G(net.ubs) + '/s ↓' + this.B2G(net.dbs) + '/s\nCPU:' + cp + '% MEM:' + mp + '% UPT:' + this.uptime());
+            var twoLine = this._settings.get_boolean('two-line');
+            var netLine = '↑' + this.B2G(net.ubs) + '/s ↓' + this.B2G(net.dbs) + '/s';
+            var sysLine = 'CPU:' + cp + '% MEM:' + mp + '% UPT:' + this.uptime();
+            label.set_style('text-align:center; font-family:Noto Mono; font-size:' + (twoLine ? '9px' : '10px') + '; line-height:1.1;');
+            label.set_text(twoLine ? (netLine + '\n' + sysLine) : (netLine + '  ' + sysLine));
             // Run as loop, not once.
             return GLib.SOURCE_CONTINUE;
         });
@@ -59,7 +64,8 @@ export default class CMUDExtension extends Extension {
             this._timeout = null;
         }
         this._indicator?.destroy();
-        this._indicator = null;        
+        this._indicator = null;
+        this._settings = null;
     }
     
     uptime() {

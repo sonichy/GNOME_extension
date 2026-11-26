@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.cmud" path="/org/gnome/shell/extensions/cmud/">
+    <key name="two-line" type="b">
+      <default>false</default>
+      <summary>Show info in two lines</summary>
+      <description>When enabled, network speed goes on the first line and CPU/memory/uptime go on a second line. When disabled, everything is shown on a single line.</description>
+    </key>
+  </schema>
+</schemalist>
