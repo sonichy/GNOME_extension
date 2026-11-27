@@ -3,6 +3,7 @@
   "author": "sonichy",
   "description": "Display uptime, cpu, memory, upload, download on GNOME taskbar.",
   "name": "CMUD",
+  "settings-schema": "org.gnome.shell.extensions.cmud",
   "shell-version": [
     "45",
     "46",
@@ -11,5 +12,5 @@
   ],
   "url": "https://github.com/sonichy/GNOME_extension",
   "uuid": "CMUD@sonichy",
-  "version": 7
+  "version": 8
 }
